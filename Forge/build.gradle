@@ -105,9 +105,19 @@ repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    flatDir {
+        dir 'libs'
+    }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 dependencies {
@@ -118,6 +128,28 @@ dependencies {
     compileOnly project(":Common")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+    // it originally ran fine with paucal here
+//    compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+//    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+
+    // but adding hexcasting here broke all the things
+    // made it so that even when commented out both paucal and patchouli no longer work
+//    compileOnly fg.deobf("at.petra-k.hexcasting:hexcasting-forge-$minecraftVersion:$hexcastingVersion")
+//    runtimeOnly fg.deobf("at.petra-k.hexcasting:hexcasting-forge-$minecraftVersion:$hexcastingVersion")
+
+    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+    // and paucal here worked fine as well
+//    testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$hexcastingVersion")
+    // same here
+//    testCompileOnly fg.deobf("at.petra-k.hexcasting:hexcasting-forge-$minecraftVersion:$paucalVersion")
+
+    // tried following walksanator's example and including them in ./libs but couldn't get that
+    // to work either
+//    implementation fg.deobf("YourMod:paucal-forge-$minecraftVersion-$paucalVersion")
+//    implementation fg.deobf("YourMod:hexcasting-forge-$minecraftVersion-$hexcastingVersion")
 }
 
 mixin {
